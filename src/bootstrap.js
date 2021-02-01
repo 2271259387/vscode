@@ -170,6 +170,9 @@
 		return nlsConfig;
 	}
 
+	/**
+	 * @returns {import('./vs/base/parts/sandbox/electron-sandbox/globals') | undefined}
+	 */
 	function safeGlobals() {
 		const globals = (typeof self === 'object' ? self : typeof global === 'object' ? global : {});
 
@@ -177,10 +180,11 @@
 	}
 
 	/**
-	 * @returns {NodeJS.Process | undefined}
+	 * @returns {import('./vs/base/parts/sandbox/electron-sandbox/globals').IPartialNodeProcess}
 	 */
 	function safeProcess() {
 		if (typeof process !== 'undefined') {
+			// @ts-ignore: we really only want to expose `IPartialNodeProcess` from this method
 			return process; // Native environment (non-sandboxed)
 		}
 
@@ -188,16 +192,20 @@
 		if (globals) {
 			return globals.process; // Native environment (sandboxed)
 		}
+
+		return undefined;
 	}
 
 	/**
-	 * @returns {Electron.IpcRenderer | undefined}
+	 * @returns {import('./vs/base/parts/sandbox/electron-sandbox/electronTypes').IpcRenderer | undefined}
 	 */
 	function safeIpcRenderer() {
 		const globals = safeGlobals();
 		if (globals) {
 			return globals.ipcRenderer;
 		}
+
+		return undefined;
 	}
 
 	/**
@@ -236,7 +244,7 @@
 	}
 
 	//#endregion
-	
+
 
 	//#region ApplicationInsights
 
