@@ -88,7 +88,7 @@ suite('HistoryService', function () {
 		history = historyService.getHistory();
 		assert.equal(history.length, 2);
 
-		historyService.remove(input2);
+		historyService.removeFromHistory(input2);
 		history = historyService.getHistory();
 		assert.equal(history.length, 1);
 		assert.equal(history[0], input1);
